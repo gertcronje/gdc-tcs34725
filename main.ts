@@ -126,7 +126,7 @@ function getWord(reg: number): number {
 
     pins.i2cWriteNumber(TCS34725_ADDR, reg | TCS34752_reg.TCS34725_CMD_BIT, NumberFormat.UInt8BE);
     buf = pins.i2cReadBuffer(TCS34725_ADDR, 2)
-    val = buf[0]<<8 | buf[1];
+    val = buf[1]<<8 | buf[0];
     return val
 }
 
