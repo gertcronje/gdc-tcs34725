@@ -70,7 +70,7 @@ enum TCS34752_reg {
 /**
 * Integration Time
 **/
-enum TCS34725IntegrationTime {
+export enum TCS34725IntegrationTime {
     TCS34725_INTEGRATIONTIME_2_4MS = 0xFF,   /**<  2.4ms - 1 cycle    - Max Count: 1024  */
     TCS34725_INTEGRATIONTIME_24MS = 0xF6,   /**<  24ms  - 10 cycles  - Max Count: 10240 */
     TCS34725_INTEGRATIONTIME_50MS = 0xEB,   /**<  50ms  - 20 cycles  - Max Count: 20480 */
@@ -84,7 +84,7 @@ let IntegrationTime = 0
 /**
 * Gain
 **/
-enum TCS34725Gain {
+export enum TCS34725Gain {
         TCS34725_GAIN_1X = 0x00,   /**<  No gain  */
         TCS34725_GAIN_4X = 0x01,   /**<  4x gain  */
         TCS34725_GAIN_16X = 0x02,   /**<  16x gain */
@@ -93,10 +93,11 @@ enum TCS34725Gain {
 
 let Gain = 0
     
-let tcs34725RGB = {
-        red: 0,
-        green: 0,
-        blue: 0
+let tcs34725RGB = {  
+    clear: 0,     
+    red: 0,
+    green: 0,
+    blue: 0
 };
 
 /**
@@ -147,7 +148,7 @@ export function tcs34725_disable() {
 }
 
 //% block="tcs34725 set integration time $value"
-export function tcs34725_set_integration_time(time: TCS34725IntegrationTime)
+export function tcs34725_set_integration_time(time: gdcTCS34725.TCS34725IntegrationTime)
 {
     /* Update the timing register */
     setReg(TCS34752_reg.TCS34725_ATIME, time);
@@ -155,14 +156,14 @@ export function tcs34725_set_integration_time(time: TCS34725IntegrationTime)
 }
 
 //% block="tcs34725 set gain $value"
-export function tcs34725_set_gain(gain: TCS34725Gain)
+    export function tcs34725_set_gain(gain: gdcTCS34725.TCS34725Gain)
 {
     setReg(TCS34752_reg.TCS34725_CONTROL, gain);
     Gain = gain;
 }
 
 
-//% block="tcs34725 get RGB data"
+//% block="tcs34725 get raw RGB data"
 export function tcs34725_get_rgb_data()
 {
     let rgb = tcs34725RGB
@@ -172,11 +173,13 @@ export function tcs34725_get_rgb_data()
     let B = getWord(TCS34752_reg.TCS34725_BDATAL);
 
     if(C == 0) {
+        rgb.clear = 0;
         rgb.red = 0;
         rgb.green = 0;
         rgb.blue = 0;
     }
     else {
+        rgb.clear = C;
         rgb.red = R;
         rgb.green = G;
         rgb.blue = B;
@@ -184,44 +187,25 @@ export function tcs34725_get_rgb_data()
     return rgb;
 }
 
-//% block="tcs34725_get_rgb888"
-export function TCS34725_GetRGB888() {
-    let i = 1.0;
+//% block="tcs34725_get_rgb"
+export function tcs34725_get_rgb() {
     let rgb = tcs34725_get_rgb_data();
 
-    // Limit data range
-    if (rgb.red >= rgb.green && rgb.red >= rgb.blue) {
-        i = rgb.red / 255.0 + 1;
-    }
-    else if (rgb.green >= rgb.red && rgb.green >= rgb.blue) {
-        i = rgb.green / 255.0 + 1;
-    }
-    else if (rgb.blue >= rgb.green && rgb.blue >= rgb.red) {
-        i = rgb.blue / 255.0 + 1;
-    }
-    if (i != 0) {
-        rgb.red = (rgb.red) / i;
-        rgb.green = (rgb.green) / i;
-        rgb.blue = (rgb.blue) / i;
-    }
-    //Amplify data differences
-    /*Please don't try to make the data negative, 
-        unless you don't change the data type*/
-    if (rgb.red > 30)
-        rgb.red = rgb.red - 30;
-    if (rgb.green > 30)
-        rgb.green = rgb.green - 30;
-    if (rgb.blue > 30)
-        rgb.blue = rgb.blue - 30;
-    rgb.red = rgb.red * 255 / 225;
-    rgb.green = rgb.green * 255 / 225;
-    rgb.blue = rgb.blue * 255 / 225;
-    if (rgb.red > 255)
-        rgb.red = 255;
-    if (rgb.green > 255)
-        rgb.green = 255;
-    if (rgb.blue > 255)
-        rgb.blue = 255;
+    let y = rgb.red*1.0;
+    y = ((y/rgb.clear)*256.0)/255.0
+    y = Math.pow(y, 2.5)*255.0
+    rgb.red = y
+
+    y = rgb.green * 1.0;
+    y = ((y / rgb.clear) * 256.0) / 255.0
+    y = Math.pow(y, 2.5) * 255.0
+    rgb.green = y
+
+    y = rgb.blue * 1.0;
+    y = ((y / rgb.clear) * 256.0) / 255.0
+    y = Math.pow(y, 2.5) * 255.0
+    rgb.blue = y
+
     return rgb;
 }
 
