@@ -122,12 +122,12 @@ function getReg(reg: number): number {
   * get ds1307's reg Word
   */
 function getWord(reg: number): number {
-    let buf = pins.createBuffer(2);
+    let buf2 = pins.createBuffer(2);
     let val = 0;
 
     pins.i2cWriteNumber(TCS34725_ADDR, reg | TCS34752_reg.TCS34725_CMD_BIT, NumberFormat.UInt8BE);
-    buf = pins.i2cReadBuffer(TCS34725_ADDR, 2)
-    val = buf[1]<<8 | buf[0];
+    buf2 = pins.i2cReadBuffer(TCS34725_ADDR, 2)
+    val = buf2[1]<<8 | buf2[0];
     return val
 }
 
@@ -189,24 +189,24 @@ export function tcs34725_get_rgb_data()
 
 //% block="tcs34725 get RGB"
 export function tcs34725_get_rgb() {
-    let rgb = tcs34725_get_rgb_data();
+    let rgb2 = tcs34725_get_rgb_data();
 
-    let y = rgb.red*1.0;
-    y = ((y/rgb.clear)*256.0)/255.0
+    let y = rgb2.red*1.0;
+    y = ((y/rgb2.clear)*256.0)/255.0
     y = Math.pow(y, 2.5)*255.0
-    rgb.red = y
+    rgb2.red = y
 
-    y = rgb.green * 1.0;
-    y = ((y / rgb.clear) * 256.0) / 255.0
+    y = rgb2.green * 1.0;
+    y = ((y / rgb2.clear) * 256.0) / 255.0
     y = Math.pow(y, 2.5) * 255.0
-    rgb.green = y
+    rgb2.green = y
 
-    y = rgb.blue * 1.0;
-    y = ((y / rgb.clear) * 256.0) / 255.0
+    y = rgb2.blue * 1.0;
+    y = ((y / rgb2.clear) * 256.0) / 255.0
     y = Math.pow(y, 2.5) * 255.0
-    rgb.blue = y
+    rgb2.blue = y
 
-    return rgb;
+    return rgb2;
 }
 
 //% block="tcs34725 init"
