@@ -192,18 +192,15 @@ export function tcs34725_get_rgb() {
     let rgb2 = tcs34725_get_rgb_data();
 
     let y = rgb2.red*1.0;
-    y = ((y/rgb2.clear)*256.0)/255.0
-    y = Math.pow(y, 2.5)*255.0
+    y = Math.round((y/rgb2.clear)*255.0)
     rgb2.red = y
 
     y = rgb2.green * 1.0;
-    y = ((y / rgb2.clear) * 256.0) / 255.0
-    y = Math.pow(y, 2.5) * 255.0
+    y = Math.round((y / rgb2.clear)*255.0)
     rgb2.green = y
 
     y = rgb2.blue * 1.0;
-    y = ((y / rgb2.clear) * 256.0) / 255.0
-    y = Math.pow(y, 2.5) * 255.0
+    y = Math.round((y / rgb2.clear)*255.0)
     rgb2.blue = y
 
     return rgb2;
@@ -220,7 +217,7 @@ export function tcs34725_init()
 
     //Set the integration time and gain
     tcs34725_set_integration_time(TCS34725IntegrationTime.TCS34725_INTEGRATIONTIME_154MS);
-    tcs34725_set_gain(TCS34725Gain.TCS34725_GAIN_60X);
+    tcs34725_set_gain(TCS34725Gain.TCS34725_GAIN_4X);
     tcs34725_enable();
     
     return 0;
