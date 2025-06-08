@@ -156,14 +156,14 @@ export function tcs34725_set_integration_time(time: gdcTCS34725.TCS34725Integrat
 }
 
 //% block="tcs34725 set gain $value"
-    export function tcs34725_set_gain(gain: gdcTCS34725.TCS34725Gain)
+export function tcs34725_set_gain(gain: gdcTCS34725.TCS34725Gain)
 {
     setReg(TCS34752_reg.TCS34725_CONTROL, gain);
     Gain = gain;
 }
 
 
-//% block="tcs34725 get raw RGB data"
+//% block="tcs34725 get raw RGB"
 export function tcs34725_get_rgb_data()
 {
     let rgb = tcs34725RGB
@@ -187,7 +187,7 @@ export function tcs34725_get_rgb_data()
     return rgb;
 }
 
-//% block="tcs34725_get_rgb"
+//% block="tcs34725 get RGB"
 export function tcs34725_get_rgb() {
     let rgb = tcs34725_get_rgb_data();
 
