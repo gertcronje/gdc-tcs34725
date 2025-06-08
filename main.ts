@@ -217,7 +217,7 @@ export function tcs34725_init()
 
     //Set the integration time and gain
     tcs34725_set_integration_time(TCS34725IntegrationTime.TCS34725_INTEGRATIONTIME_154MS);
-    tcs34725_set_gain(TCS34725Gain.TCS34725_GAIN_4X);
+    tcs34725_set_gain(TCS34725Gain.TCS34725_GAIN_60X);
     tcs34725_enable();
     
     return 0;
