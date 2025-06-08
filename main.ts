@@ -184,6 +184,47 @@ export function tcs34725_get_rgb_data()
     return rgb;
 }
 
+//% block="tcs34725_get_rgb888"
+export function TCS34725_GetRGB888() {
+    let i = 1.0;
+    let rgb = tcs34725_get_rgb_data();
+
+    // Limit data range
+    if (rgb.red >= rgb.green && rgb.red >= rgb.blue) {
+        i = rgb.red / 255.0 + 1;
+    }
+    else if (rgb.green >= rgb.red && rgb.green >= rgb.blue) {
+        i = rgb.green / 255.0 + 1;
+    }
+    else if (rgb.blue >= rgb.green && rgb.blue >= rgb.red) {
+        i = rgb.blue / 255.0 + 1;
+    }
+    if (i != 0) {
+        rgb.red = (rgb.red) / i;
+        rgb.green = (rgb.green) / i;
+        rgb.blue = (rgb.blue) / i;
+    }
+    //Amplify data differences
+    /*Please don't try to make the data negative, 
+        unless you don't change the data type*/
+    if (rgb.red > 30)
+        rgb.red = rgb.red - 30;
+    if (rgb.green > 30)
+        rgb.green = rgb.green - 30;
+    if (rgb.blue > 30)
+        rgb.blue = rgb.blue - 30;
+    rgb.red = rgb.red * 255 / 225;
+    rgb.green = rgb.green * 255 / 225;
+    rgb.blue = rgb.blue * 255 / 225;
+    if (rgb.red > 255)
+        rgb.red = 255;
+    if (rgb.green > 255)
+        rgb.green = 255;
+    if (rgb.blue > 255)
+        rgb.blue = 255;
+    return rgb;
+}
+
 //% block="tcs34725 init"
 export function tcs34725_init()
 {
